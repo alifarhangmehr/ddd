@@ -1,0 +1,60 @@
+---
+description: DDD UX rules -- apply when building or modifying any user-facing screen, component, or flow.
+globs:
+  - "**/*.{tsx,jsx,vue,svelte}"
+alwaysApply: false
+---
+
+# DDD UX Rules
+
+## Screen Design Checklist
+
+Before completing any screen modification, verify:
+
+1. **2-Second Test:** Can a new user understand what to do within 2 seconds of seeing this screen? If not, simplify.
+
+2. **Primary Action:** Is there exactly ONE obvious next action? It should be visually dominant (largest button, highest contrast, bottom of screen).
+
+3. **Text Audit:** Is every piece of text under 15 words? Can any label be shortened? Can any description be replaced by an icon or visual hierarchy?
+
+4. **Empty States:** Does every list, collection, or data display have a meaningful empty state with a clear CTA? "No items found" is never acceptable.
+
+5. **Loading States:** Is loading communicated clearly? Never show a blank screen. Use skeletons, spinners with context ("Loading your workout..."), or optimistic UI.
+
+6. **Touch Targets:** Are all interactive elements at least 44x44pt? Can the primary action be reached with one thumb?
+
+## Component Patterns
+
+### Navigation
+- Maximum 4-5 bottom tabs. If you need more, you have too many features.
+- Every screen must have a clear way to go back. No dead ends.
+- Deep links should work -- any screen should be reachable without navigating through 5 others.
+
+### Cards & Lists
+- Each list item should communicate its purpose in ONE line.
+- Cards should have exactly one primary action (tap to open, not tap to open + 3 action buttons).
+- Infinite scroll > pagination. Let the thumb do its job.
+
+### Forms
+- One field per line on mobile. Never side-by-side inputs on a phone screen.
+- Inline validation only (show errors at the field, not in an alert).
+- Auto-advance when possible (phone number formatted? Move to next field).
+- Default values for everything you can. Pre-fill, pre-select, pre-check.
+
+### Modals & Dialogs
+- Use sparingly. A modal interrupts flow -- it better be worth it.
+- Never nest modals.
+- Bottom sheets > centered modals on mobile (closer to the thumb).
+
+## Color & Visual Hierarchy
+
+- Maximum 3 colors in any single screen (background, text, accent).
+- The accent color = the action color. If it's colored, it's tappable.
+- Gray = secondary/disabled. Never use gray for primary content.
+- Dark mode is not optional. If the app has a dark background, every component must work on dark.
+
+## Animation & Motion
+
+- Transitions should be under 300ms. Anything longer feels sluggish.
+- Animate to communicate, not to decorate. Entry animations show "new content arrived." Exit animations show "this is going away."
+- Never animate something that blocks the user from acting. No "wait for the animation to finish before you can tap."

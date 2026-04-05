@@ -1,0 +1,57 @@
+---
+description: DDD rules for AI-first application development. Apply when building apps where AI is the primary interface, not just a feature.
+globs:
+  - "**/*.{ts,tsx,js,jsx}"
+alwaysApply: false
+---
+
+# DDD AI-First Development
+
+## The AI Is The UI
+
+In an AI-first app, the AI persona is not a chatbot sitting on one screen. It is the **voice of every screen**. Every static label, instruction, and help text is a missed opportunity for the AI to speak.
+
+### Principles
+
+1. **One persona, everywhere.** The same AI character appears across all screens -- same avatar, same name, same color, same voice. Users build a relationship with a character, not with "the app."
+
+2. **Context over conversation.** The AI knows what screen you're on, what data is loaded, what you did last, and what you probably want next. It speaks in context, not in generic greetings.
+
+3. **Teach by narrating.** Instead of tutorial screens or help modals, the AI teaches by commenting on what the user sees. First time on the exercise screen? The AI says "Search by name or filter by muscle." No carousel. No "Got it" button. Just contextual guidance that disappears after the first visit.
+
+4. **Replace, don't layer.** The AI message replaces static UI text -- it doesn't get added on top of it. If the AI says "Day 3 is ready -- 6 exercises, about 45 minutes," you don't also need a header that says "Day 3" and a subtitle that says "6 exercises."
+
+### Implementation Patterns
+
+#### Coach Presence Component
+Every screen should have a coach presence point -- a designated location where the AI speaks:
+- **Chat screen:** The AI is the entire interface
+- **Content screens:** A bubble/tip/banner at a logical position (below header, between sections, at empty states)
+- **Action screens:** A banner providing real-time guidance ("3 sets done, 2 to go")
+- **Settings/utility screens:** A light tip ("Your preferences are all here")
+
+#### Message Hierarchy
+1. **First-visit teaching** -- explain how to use this screen (auto-dismisses, tracked per screen)
+2. **Contextual guidance** -- based on current data state (has plan vs no plan, completed today vs not)
+3. **Persona flavor** -- trainer-specific tone applied to all messages
+4. **Fallback generic** -- if no specific message matches, a reasonable default
+
+#### Persona Consistency
+- Store trainer selection globally (SecureStore/AsyncStorage), load in a shared hook
+- Trainer color tints the UI accent across all screens
+- Message banks keyed by `screen x context x trainerId` with fallbacks
+- The trainer has a face (avatar), a name, a color, and a voice -- all four must be present in every appearance
+
+#### State-Aware AI Messages
+The AI should never say the same thing twice in the same session. Messages should be:
+- **Data-driven:** "You hit 12 sets today" not "Great workout!"
+- **Time-aware:** Morning greeting vs evening, weekday vs weekend
+- **Progress-aware:** "3rd day in a row!" not "Keep it up!"
+- **History-aware:** "Last time you did 80kg on bench" not "Push yourself!"
+
+### Anti-Patterns
+
+- **The chatbot island:** AI lives on one screen, everything else is static. Wrong. The AI IS the app.
+- **The wall of tips:** 5 coach bubbles on one screen. Pick the ONE most relevant message.
+- **The generic cheerleader:** "You're doing great!" on every screen. If the message could apply to any app, it's not contextual enough.
+- **The over-talker:** AI messages that are 3+ sentences. Keep it to 1-2 sentences max. The AI is texting, not writing an essay.
